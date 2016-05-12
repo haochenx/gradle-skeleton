@@ -1,0 +1,14 @@
+# Emacs
+*~
+\#*\#
+.\#*
+
+# gradle
+target/
+.settings
+build/
+.gradle/
+
+# Intellij
+*.iml
+.idea/
