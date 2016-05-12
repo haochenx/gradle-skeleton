@@ -13,3 +13,7 @@ classes/
 # Intellij
 *.iml
 .idea/
+
+# WildFly
+/download/
+/wildfly

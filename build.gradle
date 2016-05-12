@@ -1,5 +1,9 @@
-// Apply the java plugin to add support for Java
-apply plugin: 'war'
+// add gradle-cargo-plugin plugin dependency
+plugins {
+    id 'java'
+    id 'war'
+    id 'com.bmuschko.cargo' version '2.2.2'
+}
 
 // use Java 1.8
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -17,6 +21,11 @@ dependencies {
     // Java EE 7 API
     compile 'javax:javaee-api:7.0'
 
+    // specify the cargo library version
+    def cargoVersion = '1.4.19'
+    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion"
+    cargo "org.codehaus.cargo:cargo-ant:$cargoVersion"
+
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
 
@@ -25,4 +34,27 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+}
+
+// setup cargo to automatically download WildFly and fire it when deploying to local
+cargo {
+    containerId = 'wildfly10x'
+
+    deployable {
+        // deploy to the context of the project name defined in settings.gradle
+        // context = project.name
+        // or deploy to the ROOT
+        context = '/'
+    }
+
+    local {
+        outputFile = file('build/wildfly/wildfly.out')
+        containerProperties { property 'cargo.jboss.configuration', 'standalone-full' }
+
+        installer {
+            installUrl = 'https://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.zip'
+            downloadDir = file("download")
+            extractDir = file("wildfly")
+        }
+    }
 }
