@@ -1,8 +1,8 @@
 package com.example;
 
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 
-@Singleton
+@Stateless
 public class GreetingStore {
 
     public String getGeneralGreeting() {
